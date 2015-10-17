@@ -18,8 +18,3 @@ org-mode-config.el
 org-clock-save.el
 emacs-config.el
 
-# vagrant folder
-.vagrant/
-
-# various 
-EColiGenomes/
