@@ -1,6 +1,7 @@
 # Python files
 *.pyc
 venv/
+.cache/
 
 # emacs specific files
 
