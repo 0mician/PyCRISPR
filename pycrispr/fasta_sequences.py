@@ -14,6 +14,7 @@ class FastaSequences:
             self.__set_content_from_file(file)
         if(string):
             self.__set_content_from_string(string)
+        self.__validate_fasta()
 
     def __iter__(self):
         i = 0
@@ -25,8 +26,8 @@ class FastaSequences:
     def is_empty(self):
         return len(self.fasta) == 0
 
-    def __validate_fasta(self, fasta):
-        if(not fasta):
+    def __validate_fasta(self):
+        if(not self.fasta):
             raise ValueError
 
     def __read_file(self, file):
@@ -40,11 +41,9 @@ class FastaSequences:
 
     def __set_content_from_string(self, string):
         content = string.split("\n")
-        self.__validate_fasta(content)
-        self.__get_content(content)
+        self.__set_content(content)
 
     def __set_content(self, content):
-        self.__validate_fasta(content)
         size = len(content)
         i = 0
         while(i < size):

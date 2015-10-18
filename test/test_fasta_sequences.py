@@ -4,14 +4,12 @@ import pytest
 
 empty_fasta = ""
 
-single_fasta = """
->sequence1
+single_fasta = """>sequence1
 ACTCCCCGTGCGCGCCCGGCCCGTAGCGTCCTCGTCGCCGCCCCTCGTCTCGCAGCCGCAGCCCGCGTGG
 ACGCTCTCGCCTGAGCGCCGCGGACTAGCCCGGGTGGCC
 """
 
-multi_fasta = """
->sequence1
+multi_fasta = """>sequence1
 ACTCCCCGTGCGCGCCCGGCCCGTAGCGTCCTCGTCGCCGCCCCTCGTCTCGCAGCCGCAGCCCGCGTGG
 ACGCTCTCGCCTGAGCGCCGCGGACTAGCCCGGGTGGCC
 >sequence2
@@ -27,27 +25,41 @@ AGTGACCAGTCCTCAGACACGAAGGATGCTCCCTCACCCCCAGTCTTGGAGGCAATCTGCACAGAGCCAG
 TCTGCACACC
 """
 
-def test_is_empty():
-    assert not FastaSequences(file="test/multi.fasta").is_empty()
-
-def test_load_file():
-    f = FastaSequences(file="test/multi.fasta")
-    headers = ["sequence1", "sequence2", "sequence3", "sequence4"]
-    seqs = ["ACTCCCCGTGCGCGCCCGGCCCGTAGCGTCCTCGTCGCCGCCCCTCGTCTCGCAGCCGCAGCCCGCGTGG\
+headers = ["sequence1", "sequence2", "sequence3", "sequence4"]
+seqs = ["ACTCCCCGTGCGCGCCCGGCCCGTAGCGTCCTCGTCGCCGCCCCTCGTCTCGCAGCCGCAGCCCGCGTGG\
 ACGCTCTCGCCTGAGCGCCGCGGACTAGCCCGGGTGGCC", 
-    "CAGTCCGGCAGCGCCGGGGTTAAGCGGCCCAAGTAAACGTAGCGCAGCGATCGGCGCCGGAGATTCGCGA\
+"CAGTCCGGCAGCGCCGGGGTTAAGCGGCCCAAGTAAACGTAGCGCAGCGATCGGCGCCGGAGATTCGCGA\
 ACCCGACACTCCGCGCCGCCCGCCGGCCAGGACCCGCGGCGCGATCGCGGCGCCGCGCTACAGCCAGCCT\
 CACTGGCGCGCGGGCGAGCGCACGGGCGCTC",
-    "CACGACAGGCCCGCTGAGGCTTGTGCCAGACCTTGGAAACCTCAGGTATATACCTTTCCAGACGCGGGAT\
+"CACGACAGGCCCGCTGAGGCTTGTGCCAGACCTTGGAAACCTCAGGTATATACCTTTCCAGACGCGGGAT\
 CTCCCCTCCCC",
-    "CAGCAGACATCTGAATGAAGAAGAGGGTGCCAGCGGGTATGAGGAGTGCATTATCGTTAATGGGAACTTC\
+"CAGCAGACATCTGAATGAAGAAGAGGGTGCCAGCGGGTATGAGGAGTGCATTATCGTTAATGGGAACTTC\
 AGTGACCAGTCCTCAGACACGAAGGATGCTCCCTCACCCCCAGTCTTGGAGGCAATCTGCACAGAGCCAG\
 TCTGCACACC"]
 
+
+def test_is_empty():
+    assert not FastaSequences(file="test/multi.fasta").is_empty()
+    
+def test_validate_fasta():
+    with pytest.raises(ValueError):
+        FastaSequences(file="test/empty.fasta")
+    with pytest.raises(ValueError):
+        FastaSequences(string="")
+
+def test_load_file():
+    f = FastaSequences(file="test/multi.fasta")
     i = 0
     for s in f:
         assert s.header == headers[i]
         assert s.seq == seqs[i]
         i += 1
-    
+
+def test_load_string():
+    f = FastaSequences(string=multi_fasta)
+    i = 0
+    for s in f:
+        assert s.header == headers[i]
+        assert s.seq == seqs[i]
+        i += 1
             
