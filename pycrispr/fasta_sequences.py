@@ -23,6 +23,9 @@ class FastaSequences:
             yield self.fasta[i]
             i += 1
 
+    def __getitem__(self, pos):
+        return self.fasta[pos]
+
     def is_empty(self):
         return len(self.fasta) == 0
 
